@@ -1,52 +1,67 @@
 # nuitka-project: --product-name=IRON SOL Better Controls
-# nuitka-project-set: PATCHER_VERSION = "1.0.0"
-# nuitka-project: --product-version={PATCHER_VERSION}
 # nuitka-project-if: {OS} == "Windows":
-#   nuitka-project: --output-filename=IRON_SOL_Better_Controls_v{PATCHER_VERSION}-win.exe
+#   nuitka-project: --output-filename=IRON_SOL_Better_Controls.exe
 # nuitka-project-else:
-#   nuitka-project: --output-filename=IRON_SOL_Better_Controls_v{PATCHER_VERSION}-linux.bin
-
+#   nuitka-project: --output-filename=IRON_SOL_Better_Controls.bin
 # nuitka-project: --mode=app
 # nuitka-project: --windows-console-mode=force
-# nuitka-project: --linux-app-console-mode=force
 
 import time
+import tomllib
+from dataclasses import dataclass, field
+from pathlib import Path
 
 from pynput import keyboard
 
-JUMP_KEY_MACRO = "z"
-ABILITY_KEY_MACRO = "c"
 
-JUMP_KEY = "x"
-ABILITY_KEY = "v"
+@dataclass
+class Config:
+	jump_key_macro: str = field(default="a")
+	ability_key_macro: str = field(default="s")
+	jump_key: str = field(default="z")
+	ability_key: str = field(default="x")
 
-FRAME_DURATION = 1 / 30
+	@classmethod
+	def parse(cls, filename: str) -> "Config":
+		if Path(filename).exists():
+			with Path(filename).open("rb") as f:
+				config = cls(**tomllib.load(f))
+			print("Loaded config file successfully.")
+		else:
+			config = cls()
+			print("Config file not found. Using default values.")
+		return config
+
+config = Config.parse("config.toml")
+
 
 def print_status(message):
 	print("\r" + " " * 30 + "\r" + message, end="", flush=True)
 
 def on_press(key):
-	if key == keyboard.KeyCode.from_char(JUMP_KEY_MACRO):
+	if key == keyboard.KeyCode.from_char(config.jump_key_macro):
 		print_status("Jump key macro pressed.")
-		controller.tap(JUMP_KEY)
-		controller.release(ABILITY_KEY)
-	elif key == keyboard.KeyCode.from_char(ABILITY_KEY_MACRO):
+		controller.tap(config.jump_key)
+		controller.release(config.ability_key)
+	elif key == keyboard.KeyCode.from_char(config.ability_key_macro):
 		print_status("Ability key macro pressed.")
-		controller.release(ABILITY_KEY)
-		controller.press(ABILITY_KEY)
-		controller.release(ABILITY_KEY)
+		controller.release(config.ability_key)
+		controller.press(config.ability_key)
+		controller.release(config.ability_key)
 	else:
 		return
 
+	FRAME_DURATION = 1 / 30
+
 	time.sleep(FRAME_DURATION)
-	controller.press(ABILITY_KEY)
+	controller.press(config.ability_key)
 
 if __name__ == "__main__":
 	controller = keyboard.Controller()
 
-	print("IRON SOL Better Controls started. Press Ctrl+C to exit.")
+	print("Press Ctrl+C to exit.")
 
-	controller.press(ABILITY_KEY)
+	controller.press(config.ability_key)
 
 	try:
 		with keyboard.Listener(on_press=on_press) as listener:
@@ -55,3 +70,4 @@ if __name__ == "__main__":
 		pass
 	finally:
 		listener.stop()
+		del controller

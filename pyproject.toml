@@ -1,0 +1,18 @@
+[project]
+name = "IRON SOL Better Controls"
+version = "1.0.0"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = [
+    "pynput>=1.8.0",
+]
+
+[project.scripts]
+backrec = "controls:main"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["B", "C4", "ISC", "ICN", "PIE", "Q", "RET", "SIM", "TID", "TC", "ARG", "PTH", "E", "RUF"]
