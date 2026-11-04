@@ -1,4 +1,7 @@
+# The macro (better) jump & ability key (these are the ones you'll have to use).
 jump_key_macro = "z"
 ability_key_macro = "c"
+
+# The in-game jump & ability key (make sure they match the ones set in the game settings).
 jump_key = "x"
 ability_key = "v"
