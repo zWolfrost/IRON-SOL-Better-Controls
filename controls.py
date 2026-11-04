@@ -8,6 +8,7 @@
 # nuitka-project: --mode=app
 # nuitka-project: --windows-console-mode=force
 
+import sys
 import time
 import tomllib
 from dataclasses import dataclass, field
@@ -34,7 +35,7 @@ class Config:
 			print("Config file not found. Using default values.")
 		return config
 
-config = Config.parse("config.toml")
+config = Config.parse(Path(sys.argv[0]).absolute().parent / "config.toml")
 
 
 def print_status(message):
