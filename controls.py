@@ -22,13 +22,16 @@ ABILITY_KEY = "v"
 
 FRAME_DURATION = 1 / 30
 
+def print_status(message):
+	print("\r" + " " * 30 + "\r" + message, end="", flush=True)
+
 def on_press(key):
 	if key == keyboard.KeyCode.from_char(JUMP_KEY_MACRO):
-		print("\rJump key macro pressed.   ", end="")
+		print_status("Jump key macro pressed.")
 		controller.tap(JUMP_KEY)
 		controller.release(ABILITY_KEY)
 	elif key == keyboard.KeyCode.from_char(ABILITY_KEY_MACRO):
-		print("\rAbility key macro pressed.", end="")
+		print_status("Ability key macro pressed.")
 		controller.release(ABILITY_KEY)
 		controller.press(ABILITY_KEY)
 		controller.release(ABILITY_KEY)
