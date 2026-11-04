@@ -22,31 +22,33 @@ ABILITY_KEY = "v"
 
 FRAME_DURATION = 1 / 30
 
-controller = keyboard.Controller()
-
-def hold_ability_key():
-	time.sleep(FRAME_DURATION)
-	controller.press(ABILITY_KEY)
-
 def on_press(key):
 	if key == keyboard.KeyCode.from_char(JUMP_KEY_MACRO):
 		print("\rJump key macro pressed.   ", end="")
 		controller.tap(JUMP_KEY)
 		controller.release(ABILITY_KEY)
-		hold_ability_key()
 	elif key == keyboard.KeyCode.from_char(ABILITY_KEY_MACRO):
 		print("\rAbility key macro pressed.", end="")
 		controller.release(ABILITY_KEY)
 		controller.press(ABILITY_KEY)
 		controller.release(ABILITY_KEY)
-		hold_ability_key()
+	else:
+		return
 
-print("IRON SOL Better Controls started. Press Ctrl+C to exit.")
+	time.sleep(FRAME_DURATION)
+	controller.press(ABILITY_KEY)
 
-hold_ability_key()
+if __name__ == "__main__":
+	controller = keyboard.Controller()
 
-try:
-	with keyboard.Listener(on_press=on_press) as listener:
-		listener.join()
-except KeyboardInterrupt:
-	pass
+	print("IRON SOL Better Controls started. Press Ctrl+C to exit.")
+
+	controller.press(ABILITY_KEY)
+
+	try:
+		with keyboard.Listener(on_press=on_press) as listener:
+			listener.join()
+	except KeyboardInterrupt:
+		pass
+	finally:
+		listener.stop()
