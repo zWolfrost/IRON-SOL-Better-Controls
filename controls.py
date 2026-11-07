@@ -1,5 +1,5 @@
 # nuitka-project: --product-name=IRON SOL Better Controls
-# nuitka-project-set: PATCHER_VERSION = "1.0.0"
+# nuitka-project-set: PATCHER_VERSION = "1.0.1"
 # nuitka-project: --product-version={PATCHER_VERSION}
 # nuitka-project-if: {OS} == "Windows":
 #   nuitka-project: --output-filename=IRON_SOL_Better_Controls.exe
@@ -18,10 +18,10 @@ from pynput import keyboard
 
 @dataclass
 class Config:
-	jump_key_macro: str = field(default="a")
-	ability_key_macro: str = field(default="s")
-	jump_key: str = field(default="z")
-	ability_key: str = field(default="x")
+	jump_key_macro: str = field(default="z")
+	ability_key_macro: str = field(default="c")
+	jump_key: str = field(default="x")
+	ability_key: str = field(default="v")
 
 	@classmethod
 	def parse(cls, filename: str) -> "Config":
